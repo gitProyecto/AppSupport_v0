@@ -61,9 +61,20 @@
     var pass=document.getElementById("login__password").value;
     var user=document.getElementById("login__username").value;
 
-    var resp = Android.verify(user, pass);
-    showErrorToast();
-    showSuccessToast();
+    var resp = Android.verifyLogIn(user, pass);
+
+    if(resp == 1){
+
+       showSuccessToast();
+
+       setTimeout(function(){
+          location.href="menu.html";
+        }, 1500);
+
+    }else showErrorToast();
+
+
+
  }
 
  

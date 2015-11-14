@@ -1,5 +1,5 @@
 	function showSuccessToast() {
-        $().toastmessage('showSuccessToast', "Bienvenido a TECHNO-WORLD");
+        $().toastmessage('showSuccessToast', "Bienvenido");
     }
        
     function showErrorToast() {
