@@ -3,6 +3,8 @@ package com.miranda.luis.appsupport;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -25,9 +27,8 @@ public class Main extends Activity {
     private String TAG = "Main";
     private String LOCAL_FILE = "file:///android_asset/login.html";
     private String LOCAL_FILE1 = "file:///android_asset/menu.html";
-
-
-    boolean status = false;
+    helpBD aBD;
+    SQLiteDatabase db=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,9 @@ public class Main extends Activity {
 
         GCMRegistrar.checkDevice(Main.this);
         GCMRegistrar.checkManifest(Main.this);
+
+        //condicion
+
         GCMRegistrar.register(Main.this, "853205055727");
 
         if (!verificaConexion(this)) {
@@ -81,8 +85,12 @@ public class Main extends Activity {
 
         });
 
+        datosDB();
+
 
     }
+
+
 
 
     public static boolean verificaConexion(Context ctx) {
@@ -195,4 +203,103 @@ public class Main extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
+
+
+
+    public void datosDB(){
+
+        try{
+            aBD=new helpBD(this,"data.db",null,1);
+            db = aBD.getWritableDatabase();
+            if (db!=null) {
+                //id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT, payload TEXT, from TEXT, to TEXT, priority INT, bytes_size INT, date TIMESTAMP, checksum INT, status INT )";
+                db.execSQL("INSERT INTO messages VALUES(null,'123456789012','contiene info de ticket y ifilter','soporte1','...',5,120,'12/12/1212',1010,0);");
+                db.close();
+            } else
+                Toast.makeText(this, "db fue null :-(", Toast.LENGTH_LONG).show();
+        }//try
+        catch (Exception e)
+        {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        try{
+            aBD=new helpBD(this,"data.db",null,1);
+            db = aBD.getReadableDatabase();
+            if (db!=null) {
+                Cursor cursor = db.rawQuery("SELECT * FROM messages ",null);//+num+" and num="+numAleatorio+"",null);
+                int numcol=cursor.getColumnCount();
+                int numren=cursor.getCount();
+                while (cursor.moveToNext()){
+                    String cad=cursor.getString(1)+"  "+cursor.getString(2);
+                    Toast.makeText(this, cad, Toast.LENGTH_LONG).show();
+
+                }//while
+                //Toast.makeText(getApplicationContext(),"es "+numAleatorio,Toast.LENGTH_SHORT).show();
+
+                cursor.close();
+                db.close();
+            }//if
+            else
+                Toast.makeText(this, "db fue null :-(", Toast.LENGTH_LONG).show();
+        }//try
+        catch (Exception e) {
+            String cad2="ERROR "+e.getMessage();
+        }//catch
+
+
+
+
+
+    }
+
+
+
 }
+
+
+
+/*
+*
+* try{
+            aBD=new Ayudante(this,"mensajes",null,1);
+            db = aBD.getWritableDatabase();
+            if (db!=null) {
+                db.execSQL("insert into mensajes values(null,'General','Puedes donar en vida y después de la muerte',1)");
+                db.close();
+            } else
+                h="db fue null :-(";
+        }//try
+        catch (Exception e)
+        {
+            h=e.getMessage()+"\n\n";
+        }
+
+
+        try{
+            aBD=new Ayudante(this,"mensajes",null,1);
+            db = aBD.getReadableDatabase();
+            if (db!=null) {
+                Cursor cursor = db.rawQuery("SELECT * FROM mensajes where tematica='"+organo+"' and  num="+numAleatorio,null);//+i+" and num="+g,null);//+num+" and num="+numAleatorio+"",null);
+                int numcol=cursor.getColumnCount();
+                int numren=cursor.getCount();
+                while (cursor.moveToNext()){
+                    cad=cursor.getString(2);
+                }//while
+                //Toast.makeText(getApplicationContext(),"es "+numAleatorio,Toast.LENGTH_SHORT).show();
+
+                cursor.close();
+                db.close();
+            }//if
+            else
+                cad="db fue null";
+        }//try
+        catch (Exception e) {
+            String cad2="ERROR "+e.getMessage();
+        }//catch
+*
+*
+*
+*
+*
+* */
