@@ -11,18 +11,24 @@ import android.os.Bundle;
 
 import android.app.Activity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class Main extends Activity {
+
+public class Main extends Activity implements View.OnClickListener {
     private WebView myWebView;
     private String TAG = "Main";
     private String LOCAL_FILE = "file:///android_asset/login.html";
@@ -30,10 +36,15 @@ public class Main extends Activity {
     helpBD aBD;
     SQLiteDatabase db=null;
 
+    Button enviar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        enviar = (Button) findViewById(R.id.button);
+        enviar.setOnClickListener(this);
 
         GCMRegistrar.checkDevice(Main.this);
         GCMRegistrar.checkManifest(Main.this);
@@ -85,7 +96,9 @@ public class Main extends Activity {
 
         });
 
-        datosDB();
+        //datosDB();
+
+
 
 
     }
@@ -103,6 +116,14 @@ public class Main extends Activity {
         return bConectado;
     }
 
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.button){
+
+        myWebView.loadUrl("javascript:cambia()");
+
+        }
+    }
 
 
     private class WebAppInterface {
@@ -118,6 +139,40 @@ public class Main extends Activity {
         public void showToast(String toast) {
             Toast.makeText(mContext, toast, Toast.LENGTH_LONG).show();
         }
+
+        @JavascriptInterface
+        public String dataiFilter(){
+
+
+
+            try{
+                aBD=new helpBD(mContext,"data.db",null,1);
+                db = aBD.getReadableDatabase();
+                if (db!=null) {
+                    Cursor cursor = db.rawQuery("SELECT * FROM ifilters ",null);//+num+" and num="+numAleatorio+"",null);
+                    int numcol=cursor.getColumnCount();
+                    int numren=cursor.getCount();
+
+                    int i=0;
+
+                    while (cursor.moveToNext()){
+                        //json.put("obj",new String[]{cursor.getString(1),cursor.getString(2)});
+                    }
+
+                    cursor.close();
+                    db.close();
+                }//if
+                else
+                    Toast.makeText(mContext, "db fue null :-(", Toast.LENGTH_LONG).show();
+            }
+            catch (Exception e) {
+                String cad2 = "ERROR " + e.getMessage();
+            }
+
+
+            return "Prueba";
+        }
+
 
         @JavascriptInterface
         public int verifyLogIn(String user, String pass) {
@@ -213,7 +268,12 @@ public class Main extends Activity {
             db = aBD.getWritableDatabase();
             if (db!=null) {
                 //id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT, payload TEXT, from TEXT, to TEXT, priority INT, bytes_size INT, date TIMESTAMP, checksum INT, status INT )";
-                db.execSQL("INSERT INTO messages VALUES(null,'123456789012','contiene info de ticket y ifilter','soporte1','...',5,120,'12/12/1212',1010,0);");
+                db.execSQL("INSERT INTO messages(id, uuid, payload, fromm, too, priority, size, date, checksum, status) VALUES(null,'123456789012','contiene info de ticket y ifilter','soporte1','...',5,120,'12/12/1212',10,0);");
+                //"CREATE TABLE ifilter(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, company TEXT, status INTEGER, location TEXT, change TIMESTAMP
+                db.execSQL("INSERT INTO ifilter(id, name, company, status, location, change) VALUES(null,'Corporativo',1,9.34234|-82.34245,'12/12/1212');");
+                db.execSQL("INSERT INTO ifilter(id, name, company, status, location, change) VALUES(null,'Centro',1,9.34234|-82.34245,'12/12/1212');");
+
+
                 db.close();
             } else
                 Toast.makeText(this, "db fue null :-(", Toast.LENGTH_LONG).show();
@@ -232,7 +292,7 @@ public class Main extends Activity {
                 int numren=cursor.getCount();
                 while (cursor.moveToNext()){
                     String cad=cursor.getString(1)+"  "+cursor.getString(2);
-                    Toast.makeText(this, cad, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(this, cad, Toast.LENGTH_LONG).show();
 
                 }//while
                 //Toast.makeText(getApplicationContext(),"es "+numAleatorio,Toast.LENGTH_SHORT).show();
@@ -252,6 +312,10 @@ public class Main extends Activity {
 
 
     }
+
+
+
+
 
 
 

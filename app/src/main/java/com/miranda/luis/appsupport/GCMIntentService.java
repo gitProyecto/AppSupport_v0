@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.google.android.gcm.GCMBaseIntentService;
 
+import org.json.JSONObject;
+
 public class GCMIntentService extends GCMBaseIntentService {
 
     public GCMIntentService() {
@@ -59,10 +61,18 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     private void mostrarNotificacion(Context context, String message){
 
+        String uuid="", command="", payload="";
 
+        try {
+            JSONObject json = new JSONObject(message);
+            JSONObject jsonM = json.getJSONObject("Message");
+
+            uuid = jsonM.getString("UUID");
+
+        }catch (Exception ex){}
 
         Intent notificationIntent = new Intent(context, Main.class);
-        notificationIntent.putExtra("alerta", message);
+        notificationIntent.putExtra("alerta", uuid);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 1, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -76,7 +86,7 @@ public class GCMIntentService extends GCMBaseIntentService {
                 .setTicker("Nueva Alerta")
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
-                .setContentTitle("Alerta # " + message)
+                .setContentTitle("Alerta # " + uuid)
                 .setContentText(message);
 
 
