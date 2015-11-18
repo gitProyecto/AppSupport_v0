@@ -33,18 +33,33 @@
 </div>
 
 
-
-<a href="#"></a>
-
-
-
-
-
 <br><br><button onclick="myFunction()">Try it</button><br><br>
+
+<p id="demo"></p>
+
+
 
 
 
 <script type="text/javascript">
+
+
+var text = '[{"firstName":"John","lastName":"Doe"},{"firstName":"John2","lastName":"Doe2"}]';
+
+var obj = JSON.parse(text);
+
+var len = Object.keys(obj).length;
+
+for (var j =0; j< len; j++){
+
+var node = document.createElement("a");                 // Create a <li> node
+var fragment = create(obj[j].firstName + " " + obj[j].lastName);
+node.appendChild(fragment);                              // Append the text to <li>
+document.getElementById("demo").appendChild(node);
+
+}
+
+//document.getElementById("demo").innerHTML = obj[j].firstName + " " + obj[j].lastName;
 
 var i=0;
 var aux=-1;
