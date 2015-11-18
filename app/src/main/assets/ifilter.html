@@ -44,22 +44,6 @@
 <script type="text/javascript">
 
 
-var text = '[{"firstName":"John","lastName":"Doe"},{"firstName":"John2","lastName":"Doe2"}]';
-
-var obj = JSON.parse(text);
-
-var len = Object.keys(obj).length;
-
-for (var j =0; j< len; j++){
-
-var node = document.createElement("a");                 // Create a <li> node
-var fragment = create(obj[j].firstName + " " + obj[j].lastName);
-node.appendChild(fragment);                              // Append the text to <li>
-document.getElementById("demo").appendChild(node);
-
-}
-
-//document.getElementById("demo").innerHTML = obj[j].firstName + " " + obj[j].lastName;
 
 var i=0;
 var aux=-1;
@@ -83,26 +67,29 @@ function create(htmlStr) {
 
 function data(){
 
-var array = [["Corporativo", "12/12/2015"], ["Centro", "12/12/2015"] , ["Aguascalientes", "12/12/2015"]];
+    var text =  Android.dataiFilter().toString();
+    var obj = JSON.parse(text);
+    var len = Object.keys(obj).length;
 
-for (var i=0; i<array.length; i++){
+    var array = [["Corporativo", "12/12/2015"], ["Centro", "12/12/2015"] , ["Aguascalientes", "12/12/2015"]];
+
+    for (var i=0; i<len; i++){
 
 
-var node = document.createElement("li");                 // Create a <li> node
-var fragment = create('<a href="#"><li class="clearfix">'+
-					'<img src="images/ifilter.png"  WIDTH=70 HEIGHT=65 class="thumbnail">'+
-					'<div ><span class="separa" style="float:right"><br>Date: 12/12/2015 </span><h2>'+array[i][0]+'</h2></div>'+
-					'<p class="desc">Info ...</p>'+
-					'<span class="price">Info ...</span></li></a>');
-node.onclick = function () {
-	   thisindex(this);
-	};
-	node.appendChild(fragment);                              // Append the text to <li>
-	document.getElementById("list").appendChild(node);
+    var node = document.createElement("li");                 // Create a <li> node
+    var fragment = create('<a href="#"><li class="clearfix">'+
+                        '<img src="images/ifilter.png"  WIDTH=70 HEIGHT=65 class="thumbnail">'+
+                        '<div ><span class="separa" style="float:right"><br>Date: 12/12/2015 </span><h2>'+obj[i].name+'</h2></div>'+
+                        '<p class="desc">Info ...</p>'+
+                        '<span class="price">Info ...</span></li></a>');
+    node.onclick = function () {
+           thisindex(this);
+        };
+        node.appendChild(fragment);                              // Append the text to <li>
+        document.getElementById("list").appendChild(node);
 
+    }
 }
-}
-
 
 
 function myFunction() {

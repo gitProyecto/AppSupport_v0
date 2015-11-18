@@ -96,7 +96,7 @@ public class Main extends Activity implements View.OnClickListener {
 
         });
 
-        //datosDB();
+        datosDB();
 
 
 
@@ -141,7 +141,9 @@ public class Main extends Activity implements View.OnClickListener {
         }
 
         @JavascriptInterface
-        public String dataiFilter(){
+        public  String dataiFilter(){
+
+            JSONArray array = new JSONArray();
 
             try{
                 aBD=new helpBD(mContext,"data.db",null,1);
@@ -154,7 +156,12 @@ public class Main extends Activity implements View.OnClickListener {
                     int i=0;
 
                     while (cursor.moveToNext()){
-                        //json.put("obj",new String[]{cursor.getString(1),cursor.getString(2)});
+
+                        JSONObject obj = new JSONObject();
+                        obj.put("name",cursor.getString(1));
+                        obj.put("company",cursor.getString(2));
+
+                        array.put(obj);
                     }
 
                     cursor.close();
@@ -167,8 +174,7 @@ public class Main extends Activity implements View.OnClickListener {
                 String cad2 = "ERROR " + e.getMessage();
             }
 
-
-            return "Prueba";
+            return array.toString();
         }
 
 
@@ -268,8 +274,8 @@ public class Main extends Activity implements View.OnClickListener {
                 //id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT, payload TEXT, from TEXT, to TEXT, priority INT, bytes_size INT, date TIMESTAMP, checksum INT, status INT )";
                 db.execSQL("INSERT INTO messages(id, uuid, payload, fromm, too, priority, size, date, checksum, status) VALUES(null,'123456789012','contiene info de ticket y ifilter','soporte1','...',5,120,'12/12/1212',10,0);");
                 //"CREATE TABLE ifilter(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, company TEXT, status INTEGER, location TEXT, change TIMESTAMP
-                db.execSQL("INSERT INTO ifilter(id, name, company, status, location, change) VALUES(null,'Corporativo',1,9.34234|-82.34245,'12/12/1212');");
-                db.execSQL("INSERT INTO ifilter(id, name, company, status, location, change) VALUES(null,'Centro',1,9.34234|-82.34245,'12/12/1212');");
+                db.execSQL("INSERT INTO ifilters(id, name, company, status, location, change) VALUES(null,'Corporativo','Korporativo',1,'9.34234 -82.34245','12/12/1212');");
+                db.execSQL("INSERT INTO ifilters(id, name, company, status, location, change) VALUES(null,'Centro','Korporativo',1,'9.34234 -82.34245','12/12/1212');");
 
 
                 db.close();
