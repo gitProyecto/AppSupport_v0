@@ -1,42 +1,60 @@
-<!doctype html>
-<html lang="en">
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Simple Mobile Listview</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Simple Mobile Listview</title>
+    <meta name="author" content="Jake Rocheleau">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="css/styleslist.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript" src="js/retina.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="css/styleslist.css">
-	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-	<script type="text/javascript" src="js/retina.js"></script>
-
-	<link type="text/css" href="css/jquery.toastmessage-min.css" rel="stylesheet">
-	<script type="text/javascript" src="js/jquery-1.5.min.js"></script>
-	<script type="text/javascript" src="js/jquery.toastmessage-min.js"></script>
-	<script type="text/javascript" src="js/alertas.js"></script>
-
+    <script src="js/Chart.js"></script>
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
+    <![endif]-->
 </head>
 
 <body onload="data();">
 <div id="view">
-	<header>
-		<h1>Detail List UI</h1>
-	</header>
+    <header>
+        <h1>iFilters</h1>
+    </header>
 
-	<div id="container">
-		<ul id="list">
-			<!-- row 01 -->
+    <div id="container">
+        <ul id="list">
 
 
-			</li></a>
 
-		</ul>
-	</div>
+        </ul>
+    </div>
 </div>
 
-<form name="form1">
-	<br><br><input type="button" name="boton" value="hazme click" onClick="cambia()">
-</form>
+
+
+<a href="#"></a>
+
+
+
+
+
+<br><br><button onclick="myFunction()">Try it</button><br><br>
+
+
 
 <script type="text/javascript">
+
+var i=0;
+var aux=-1;
+
+$(document).ready(function(){
+	$("a").on("click", function(e){
+		e.preventDefault();
+	});
+});
+
 
 function create(htmlStr) {
     var frag = document.createDocumentFragment(),
@@ -48,7 +66,6 @@ function create(htmlStr) {
     return frag;
 }
 
-
 function data(){
 
 var array = [["Corporativo", "12/12/2015"], ["Centro", "12/12/2015"] , ["Aguascalientes", "12/12/2015"]];
@@ -56,21 +73,141 @@ var array = [["Corporativo", "12/12/2015"], ["Centro", "12/12/2015"] , ["Aguasca
 for (var i=0; i<array.length; i++){
 
 
-var node = document.createElement("LI");                 // Create a <li> node
+var node = document.createElement("li");                 // Create a <li> node
 var fragment = create('<a href="#"><li class="clearfix">'+
 					'<img src="images/ifilter.png"  WIDTH=70 HEIGHT=65 class="thumbnail">'+
 					'<div ><span class="separa" style="float:right"><br>Date: 12/12/2015 </span><h2>'+array[i][0]+'</h2></div>'+
-					'<p class="desc">Rental located in New York City, NY. 1 bedroom 2 baths.</p>'+
-					'<span class="price">$1,350/month</span></li></a>');
-node.appendChild(fragment);                              // Append the text to <li>
-document.getElementById("list").appendChild(node);
+					'<p class="desc">Info ...</p>'+
+					'<span class="price">Info ...</span></li></a>');
+node.onclick = function () {
+	   thisindex(this);
+	};
+	node.appendChild(fragment);                              // Append the text to <li>
+	document.getElementById("list").appendChild(node);
 
 }
 }
 
-function cambia(){
-    document.form1.boton.value='acabas de hacer click en el boton';
+
+
+function myFunction() {
+
+var node = document.createElement("li");                 // Create a <li> node
+var fragment = create('<a href="#"><li class="clearfix">'+
+					'<img src="images/ifilter.png"  WIDTH=70 HEIGHT=65 class="thumbnail">'+
+					'<div ><span class="separa" style="float:right"><br>Date: 12/12/2015 </span><h2>..........</h2></div>'+
+					'<p class="desc">info ...</p>'+
+					'<span class="price">info.......</span></li></a>');
+node.onclick = function () {
+	   thisindex(this);
+	};
+	node.appendChild(fragment);                              // Append the text to <li>
+	document.getElementById("list").appendChild(node);
+
+
+
+
 }
+
+function thisindex(elm)
+{
+
+    var re = document.getElementById('ele');
+	if (!re){
+		console.log("El elemento selecionado no existe");
+	} else {
+		var padre = re.parentNode;
+		padre.removeChild(re);
+	}
+
+ var the_li = elm;
+ var the_ul = elm.parentNode;
+ var li_list = the_ul.childNodes;
+ var count = 0; // Tracks the index of LI nodes
+
+ // Step through all the child nodes of the UL
+ for( var i = 0; i < li_list.length; i++ )
+ {
+ var node = li_list.item(i);
+ if( node )
+ {
+ // Check to see if the node is a LI
+ if( node.nodeName == "LI" )
+ {
+ // Increment the count of LI nodes
+ count++;
+ // Check to see if this node is the one passed in
+ if( the_li == node )
+ {
+ // If so, alert the current count
+ //alert(count);
+	if(aux == count){
+		aux=-1;
+	}else
+		info(count);
+ }
+ }
+ }
+ }
+}
+
+
+function info(n){
+
+	var node = document.createElement("LI");
+    node.id = 'ele';
+	var fragment = create('<div style="width:100%"> <div><canvas id="canvas" height="100" ></canvas>  </div> </div>');
+
+	var d = document.getElementById('list');
+	node.appendChild(fragment);
+	d.insertBefore(node, d.children[n]);
+	aux=n;
+
+	graf();
+
+}
+
+
+    var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+
+    var lineChartData = {
+      //labels : ["January","February","March","April","May","June","July","August","September","October","November","December"],
+      labels : ["","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday",""],
+
+      datasets : [
+        {
+          label: "My First dataset",
+          fillColor : "rgba(220,220,220,0.2)",
+          strokeColor : "rgba(220,220,220,1)",
+          pointColor : "rgba(220,220,220,1)",
+          pointStrokeColor : "#fff",
+          pointHighlightFill : "#fff",
+          pointHighlightStroke : "rgba(220,220,220,1)",
+          data : [0,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),0]
+        },
+        {
+          label: "My Second dataset",
+          fillColor : "rgba(151,187,205,0.2)",
+          strokeColor : "rgba(151,187,205,1)",
+          pointColor : "rgba(151,187,205,1)",
+          pointStrokeColor : "#fff",
+          pointHighlightFill : "#fff",
+          pointHighlightStroke : "rgba(151,187,205,1)",
+          data : [0,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),0]
+        }
+      ]
+
+    }
+
+
+	  	function graf(){
+	    var ctx = document.getElementById("canvas").getContext("2d");
+	    window.myLine = new Chart(ctx).Line(lineChartData, {
+	      responsive: true
+	    });
+  		}
+
+
 
 
 </script>

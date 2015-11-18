@@ -43,8 +43,8 @@ public class Main extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        enviar = (Button) findViewById(R.id.button);
-        enviar.setOnClickListener(this);
+        //enviar = (Button) findViewById(R.id.button);
+        //enviar.setOnClickListener(this);
 
         GCMRegistrar.checkDevice(Main.this);
         GCMRegistrar.checkManifest(Main.this);
@@ -118,11 +118,11 @@ public class Main extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.button){
+        //if(v.getId() == R.id.button){
 
-        myWebView.loadUrl("javascript:cambia()");
+        //myWebView.loadUrl("javascript:cambia()");
 
-        }
+        //}
     }
 
 
@@ -142,8 +142,6 @@ public class Main extends Activity implements View.OnClickListener {
 
         @JavascriptInterface
         public String dataiFilter(){
-
-
 
             try{
                 aBD=new helpBD(mContext,"data.db",null,1);
