@@ -1,66 +1,37 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>AppSupport</title>
-
-
-	<link type="text/css" href="css/jquery.toastmessage-min.css" rel="stylesheet">
-	<script type="text/javascript" src="js/jquery-1.5.min.js"></script>
-	<script type="text/javascript" src="js/jquery.toastmessage-min.js"></script>
-	<script type="text/javascript" src="js/alertas.js"></script>
-
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 	<link rel="stylesheet" type="text/css" href="css/styleslist.css">
-	<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+
+
 	<script type="text/javascript" src="js/retina.js"></script>
 
 	<link type="text/css" rel="stylesheet" href="css/listch.css" />
 
 </head>
 
-<body>
+
+
+<body onload="data();">
 <div id="view">
 	<header>
-		<h1>Chat</h1>
+		<h1>Detail List UI</h1>
 	</header>
 
-	<v id="container">
+	<div id="container" height="60px">
 		<ul id="list">
 
-			<li>
-				<div id="wrapper">
-					<div id="menu">
-						<p class="welcome">Welcome, <b></b></p>
-						<p class="logout"><a id="exit" href="#">Exit Chat</a></p>
-						<div style="clear:both"></div>
-					</div>
-					<div id="chatbox">Hola ..........</div>
 
-						<form name="message" action="">
-						<input name="usermsg" type="text" id="usermsg" size="63" />
-						<input name="submitmsg" type="submit"  id="submitmsg" value="Send" />
-					</form>
-				</div>
-			</li>
+
 
 
 		</ul>
-	</v>
+	</div>
 </div>
-
-<br><br><button onclick="myFunction()">Try it</button><br><br>
 
 
 <script type="text/javascript">
-
-var i=0;
-
-
-$(document).ready(function(){
-	$("a").on("click", function(e){
-		e.preventDefault();
-	});
-});
 
 
 
@@ -75,27 +46,44 @@ function create(htmlStr) {
 }
 
 
-function myFunction() {
+function data(){
 
+var array = [["1","Ing Name", "Soporte Tecnico"],["2","Ing Name", "Soporte Tecnico"],["3","Ing Name", "Soporte Tecnico"],["4","Ing Name", "Soporte Tecnico"],["5","Ing Name", "Soporte Tecnico"],["6","Ing Name", "Soporte Tecnico"],["7","Ing Name", "Soporte Tecnico"],["8","Ing Name", "Soporte Tecnico"],["9","Andre Rosales", "Soporte Tecnico"], ["10","Luis Rosales", "Desarrollo de Software"] , ["11","Luis Alfredo", "Soporte Tecnico"]];
 
+//alert(array.length);  
+
+for (var i=0; i<array.length; i++){
 
 var node = document.createElement("LI");                 // Create a <li> node
-var fragment = create('<a onclick="toast(i++)"; href="#"><li class="clearfix">'+
-					'<img src="images/new.png"  WIDTH=70 HEIGHT=65 class="thumbnail">'+
-					'<div><span class="separa" style="float:right"><br>Date: 12/12/2015 </span><h2>Alta en red corporativo</h2></div>'+
-					'<div><p class="desc" style="float:right">To: Ing. Luis Rosales </p><p class="desc">From: Ing. Luis Flores </p></div>'+
-					'<br><span class="price">Ticket: 123456</span></li></a>');
+var fragment = create('<a id="'+array[i][0]+'"; onClick="Message(this.id);" href="#"><li class="clearfix">'+
+					'<img src="images/usuario.png"  WIDTH=35 HEIGHT=35 class="thumbnail">'+
+					'<div ><span class="separa" style="float:right"><br>....</span><h2>'+array[i][1]+'</h2></div>'+
+					'<p class="desc">'+array[i][2]+'</p>'+
+					'</li></a>');
 node.appendChild(fragment);                              // Append the text to <li>
 document.getElementById("list").appendChild(node);
 
 }
 
-function toast(texto){
-
- Android.showToast(texto);
+var node = document.createElement("LI");                 // Create a <li> node
+var fragment = create('<div id="wrapper"><div id="menu">'+
+						'<p class="welcome">Welcome, <b></b></p>'+
+						'<p class="logout"><a id="exit" href="#">Exit Chat</a></p><br><br>'+
+						'<div style="clear:both"></div><div id="chatbox">Hola ..........</div><br>'+
+						'<input name="usermsg" type="text" id="usermsg" size="90" />'+
+						'<input style="float:right" name="submitmsg" type="submit"  id="submitmsg" value="Send" />'+
+					'<div id="menu">'+
+					'</form></div>');
+node.appendChild(fragment);                              // Append the text to <li>
+document.getElementById("list").appendChild(node);
 
 }
 
+
+function Message(id){
+ document.getElementById("usermsg").focus();
+ document.getElementById("usermsg").value = id;
+}
 
 
 </script>

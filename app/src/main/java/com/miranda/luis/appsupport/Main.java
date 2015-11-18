@@ -41,6 +41,8 @@ public class Main extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
 
         //enviar = (Button) findViewById(R.id.button);
@@ -82,7 +84,11 @@ public class Main extends Activity implements View.OnClickListener {
         Boolean registro = prefs.getBoolean("registro", false);
 
         if(registro == true) myWebView.loadUrl(LOCAL_FILE1);
-        else    myWebView.loadUrl(LOCAL_FILE);
+        else {
+            myWebView.loadUrl(LOCAL_FILE);
+            datosDB();
+
+        }
 
         myWebView.setWebViewClient(new WebViewClient() {
 
@@ -96,12 +102,14 @@ public class Main extends Activity implements View.OnClickListener {
 
         });
 
-        datosDB();
+
 
 
 
 
     }
+
+
 
 
 
@@ -116,6 +124,7 @@ public class Main extends Activity implements View.OnClickListener {
         return bConectado;
     }
 
+
     @Override
     public void onClick(View v) {
         //if(v.getId() == R.id.button){
@@ -126,6 +135,8 @@ public class Main extends Activity implements View.OnClickListener {
     }
 
 
+    //Interactua con Javascript
+
     private class WebAppInterface {
         Context mContext;
         int i=0;
@@ -134,12 +145,13 @@ public class Main extends Activity implements View.OnClickListener {
             mContext = c;
         }
 
-        // This function can be called in our JS script now
+        // Pruebas desde Javascript
         @JavascriptInterface
         public void showToast(String toast) {
             Toast.makeText(mContext, toast, Toast.LENGTH_LONG).show();
         }
 
+        // Obteber datos de Hosts
         @JavascriptInterface
         public  String dataiFilter(){
 
@@ -149,24 +161,17 @@ public class Main extends Activity implements View.OnClickListener {
                 aBD=new helpBD(mContext,"data.db",null,1);
                 db = aBD.getReadableDatabase();
                 if (db!=null) {
-                    Cursor cursor = db.rawQuery("SELECT * FROM ifilters ",null);//+num+" and num="+numAleatorio+"",null);
-                    int numcol=cursor.getColumnCount();
-                    int numren=cursor.getCount();
-
-                    int i=0;
+                    Cursor cursor = db.rawQuery("SELECT * FROM ifilters ",null);
 
                     while (cursor.moveToNext()){
-
                         JSONObject obj = new JSONObject();
                         obj.put("name",cursor.getString(1));
                         obj.put("company",cursor.getString(2));
-
                         array.put(obj);
                     }
-
                     cursor.close();
                     db.close();
-                }//if
+                }
                 else
                     Toast.makeText(mContext, "db fue null :-(", Toast.LENGTH_LONG).show();
             }
@@ -178,6 +183,39 @@ public class Main extends Activity implements View.OnClickListener {
         }
 
 
+        // Obteber datos de Usuarios
+        @JavascriptInterface
+        public  String dataUsers(){
+
+            JSONArray array = new JSONArray();
+
+            try{
+                aBD=new helpBD(mContext,"data.db",null,1);
+                db = aBD.getReadableDatabase();
+                if (db!=null) {
+                    Cursor cursor = db.rawQuery("SELECT * FROM users",null);
+
+                    while (cursor.moveToNext()){
+                        JSONObject obj = new JSONObject();
+                        obj.put("name",cursor.getString(1));
+                        obj.put("company",cursor.getString(2));
+                        array.put(obj);
+                    }
+                    cursor.close();
+                    db.close();
+                }
+                else
+                    Toast.makeText(mContext, "db fue null :-(", Toast.LENGTH_LONG).show();
+            }
+            catch (Exception e) {
+                String cad2 = "ERROR " + e.getMessage();
+            }
+
+            return array.toString();
+        }
+
+
+        // Obteber datos de usuario con el server con php
         @JavascriptInterface
         public int verifyLogIn(String user, String pass) {
             String regId = GCMRegistrar.getRegistrationId(Main.this);
@@ -200,32 +238,13 @@ public class Main extends Activity implements View.OnClickListener {
                     int status = Integer.parseInt(data.getString("status"));
                     Registro(name,email, userr, status);
                 }
-                //Toast.makeText(mContext, json.toString(), Toast.LENGTH_LONG).show();
-
-
-
             }catch (Exception ex){}
-
-
             return i;
-
-        }
-
-
-        public String[] verifyUser() {
-
-            SharedPreferences prefs = getSharedPreferences("LogInn", MODE_PRIVATE);
-            String registro = prefs.getString("name", "");
-            int status = prefs.getInt("status", 0);
-            String [] user = {registro, ""+status};
-
-            return user;
         }
 
 
 
     }
-
 
     public void Registro(String name, String email, int user, int stat){
 
@@ -325,49 +344,3 @@ public class Main extends Activity implements View.OnClickListener {
 
 }
 
-
-
-/*
-*
-* try{
-            aBD=new Ayudante(this,"mensajes",null,1);
-            db = aBD.getWritableDatabase();
-            if (db!=null) {
-                db.execSQL("insert into mensajes values(null,'General','Puedes donar en vida y después de la muerte',1)");
-                db.close();
-            } else
-                h="db fue null :-(";
-        }//try
-        catch (Exception e)
-        {
-            h=e.getMessage()+"\n\n";
-        }
-
-
-        try{
-            aBD=new Ayudante(this,"mensajes",null,1);
-            db = aBD.getReadableDatabase();
-            if (db!=null) {
-                Cursor cursor = db.rawQuery("SELECT * FROM mensajes where tematica='"+organo+"' and  num="+numAleatorio,null);//+i+" and num="+g,null);//+num+" and num="+numAleatorio+"",null);
-                int numcol=cursor.getColumnCount();
-                int numren=cursor.getCount();
-                while (cursor.moveToNext()){
-                    cad=cursor.getString(2);
-                }//while
-                //Toast.makeText(getApplicationContext(),"es "+numAleatorio,Toast.LENGTH_SHORT).show();
-
-                cursor.close();
-                db.close();
-            }//if
-            else
-                cad="db fue null";
-        }//try
-        catch (Exception e) {
-            String cad2="ERROR "+e.getMessage();
-        }//catch
-*
-*
-*
-*
-*
-* */
