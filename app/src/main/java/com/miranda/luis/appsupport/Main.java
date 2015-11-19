@@ -2,6 +2,7 @@ package com.miranda.luis.appsupport;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -64,13 +65,15 @@ public class Main extends Activity implements View.OnClickListener {
 
         try {
 
-            Bundle bundle = getIntent().getExtras();
-            String message = bundle.getString("alerta");
+            Intent intent = getIntent();
+            String value = intent.getStringExtra("alerta");
+            dataPayload(value);
 
+        }catch (Exception ex) {
 
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error al recibir datos", Toast.LENGTH_LONG).show();
 
-        }catch (Exception ex) {}
+        }
 
         myWebView = (WebView) findViewById(R.id.web);
         WebSettings webSettings = myWebView.getSettings();
@@ -86,7 +89,7 @@ public class Main extends Activity implements View.OnClickListener {
         if(registro == true) myWebView.loadUrl(LOCAL_FILE1);
         else {
             myWebView.loadUrl(LOCAL_FILE);
-            datosDB();
+            Ejemplos();
 
         }
 
@@ -106,6 +109,25 @@ public class Main extends Activity implements View.OnClickListener {
 
 
 
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        // put your code here...
+
+        try {
+
+            Intent intent = getIntent();
+            String value = intent.getStringExtra("alerta");
+            dataPayload(value);
+
+        }catch (Exception ex) {
+
+            Toast.makeText(this, "Error al recibir datos", Toast.LENGTH_LONG).show();
+
+        }
 
     }
 
@@ -151,6 +173,40 @@ public class Main extends Activity implements View.OnClickListener {
             Toast.makeText(mContext, toast, Toast.LENGTH_LONG).show();
         }
 
+        // Obteber datos de Ticket
+        @JavascriptInterface
+        public  String dataMessage(){
+
+            JSONArray array = new JSONArray();
+
+            try{
+                aBD=new helpBD(mContext,"data.db",null,1);
+                db = aBD.getReadableDatabase();
+                if (db!=null) {
+                    Cursor cursor = db.rawQuery("SELECT * FROM ticket ",null);
+
+                    while (cursor.moveToNext()){
+
+                        JSONObject obj = new JSONObject();
+                        obj.put("id",cursor.getString(0));
+                        array.put(obj);
+                    }
+                    cursor.close();
+                    db.close();
+                }
+                else
+                    Toast.makeText(mContext, "db fue null :-(", Toast.LENGTH_LONG).show();
+            }
+            catch (Exception e) {
+                String cad2 = "ERROR " + e.getMessage();
+            }
+
+            return array.toString();
+        }
+
+
+
+
         // Obteber datos de Hosts
         @JavascriptInterface
         public  String dataiFilter(){
@@ -164,9 +220,14 @@ public class Main extends Activity implements View.OnClickListener {
                     Cursor cursor = db.rawQuery("SELECT * FROM ifilters ",null);
 
                     while (cursor.moveToNext()){
+
                         JSONObject obj = new JSONObject();
+                        obj.put("id",cursor.getString(0));
                         obj.put("name",cursor.getString(1));
                         obj.put("company",cursor.getString(2));
+                        obj.put("status",cursor.getString(3));
+                        obj.put("location",cursor.getString(4));
+                        obj.put("change",cursor.getString(5));
                         array.put(obj);
                     }
                     cursor.close();
@@ -194,11 +255,14 @@ public class Main extends Activity implements View.OnClickListener {
                 db = aBD.getReadableDatabase();
                 if (db!=null) {
                     Cursor cursor = db.rawQuery("SELECT * FROM users",null);
-
                     while (cursor.moveToNext()){
                         JSONObject obj = new JSONObject();
+
+                        obj.put("id",cursor.getString(0));
                         obj.put("name",cursor.getString(1));
-                        obj.put("company",cursor.getString(2));
+                        obj.put("email",cursor.getString(2));
+                        obj.put("position",cursor.getString(3));
+                        obj.put("status",cursor.getString(4));
                         array.put(obj);
                     }
                     cursor.close();
@@ -246,6 +310,7 @@ public class Main extends Activity implements View.OnClickListener {
 
     }
 
+    //Guardar preferencias de usuario
     public void Registro(String name, String email, int user, int stat){
 
         SharedPreferences.Editor editor = getSharedPreferences("LogInn", MODE_PRIVATE).edit();
@@ -254,7 +319,6 @@ public class Main extends Activity implements View.OnClickListener {
         editor.putString("email", email);
         editor.putInt("user", user);
         editor.putInt("status", stat);
-
         editor.commit();
 
         //Intent intent = new Intent(this, Main.class);
@@ -282,53 +346,18 @@ public class Main extends Activity implements View.OnClickListener {
     }
 
 
+    public  void dataPayload(String val ){
 
 
-    public void datosDB(){
 
-        try{
-            aBD=new helpBD(this,"data.db",null,1);
-            db = aBD.getWritableDatabase();
-            if (db!=null) {
-                //id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT, payload TEXT, from TEXT, to TEXT, priority INT, bytes_size INT, date TIMESTAMP, checksum INT, status INT )";
-                db.execSQL("INSERT INTO messages(id, uuid, payload, fromm, too, priority, size, date, checksum, status) VALUES(null,'123456789012','contiene info de ticket y ifilter','soporte1','...',5,120,'12/12/1212',10,0);");
-                //"CREATE TABLE ifilter(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, company TEXT, status INTEGER, location TEXT, change TIMESTAMP
-                db.execSQL("INSERT INTO ifilters(id, name, company, status, location, change) VALUES(null,'Corporativo','Korporativo',1,'9.34234 -82.34245','12/12/1212');");
-                db.execSQL("INSERT INTO ifilters(id, name, company, status, location, change) VALUES(null,'Centro','Korporativo',1,'9.34234 -82.34245','12/12/1212');");
+        //identificar que datos recibimos
+
+        Toast.makeText(this, "Datos Verificados !!"+val, Toast.LENGTH_LONG).show();
 
 
-                db.close();
-            } else
-                Toast.makeText(this, "db fue null :-(", Toast.LENGTH_LONG).show();
-        }//try
-        catch (Exception e)
-        {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        //Si ifilter
 
-        try{
-            aBD=new helpBD(this,"data.db",null,1);
-            db = aBD.getReadableDatabase();
-            if (db!=null) {
-                Cursor cursor = db.rawQuery("SELECT * FROM messages ",null);//+num+" and num="+numAleatorio+"",null);
-                int numcol=cursor.getColumnCount();
-                int numren=cursor.getCount();
-                while (cursor.moveToNext()){
-                    String cad=cursor.getString(1)+"  "+cursor.getString(2);
-                    //Toast.makeText(this, cad, Toast.LENGTH_LONG).show();
-
-                }//while
-                //Toast.makeText(getApplicationContext(),"es "+numAleatorio,Toast.LENGTH_SHORT).show();
-
-                cursor.close();
-                db.close();
-            }//if
-            else
-                Toast.makeText(this, "db fue null :-(", Toast.LENGTH_LONG).show();
-        }//try
-        catch (Exception e) {
-            String cad2="ERROR "+e.getMessage();
-        }//catch
+        //Si ticket
 
 
 
@@ -342,5 +371,34 @@ public class Main extends Activity implements View.OnClickListener {
 
 
 
-}
+    public void Ejemplos(){
 
+        try{
+            aBD=new helpBD(this,"data.db",null,1);
+            db = aBD.getWritableDatabase();
+            if (db!=null) {
+
+                //datos de mensajes
+                db.execSQL("INSERT INTO messages(id, uuid, payload, fromm, too, priority, size, date, checksum, status) VALUES(null,'123456789012','contiene info de ticket y ifilter','soporte1','...',5,120,'12/12/1212',10,0);");
+
+                //datos de host
+                db.execSQL("INSERT INTO ifilters(id, name, company, status, location, change) VALUES(null,'Corporativo','Korporativo',1,'9.34234 -82.34245','12/12/1212');");
+                db.execSQL("INSERT INTO ifilters(id, name, company, status, location, change) VALUES(null,'Centro','Korporativo',1,'9.34234 -82.34245','12/12/1212');");
+
+                //datos de user
+                db.execSQL("INSERT INTO users(id, name, email, position, status) VALUES(null,'Ing Luis Rosales','rosales@techno-world.com','Desarrollo de software',1);");
+                db.execSQL("INSERT INTO users(id, name, email, position, status) VALUES(null,'Luis Flores','flores@techno-world.com','Soporte Tecnico',1);");
+
+
+                db.close();
+            } else
+                Toast.makeText(this, "db fue null :-(", Toast.LENGTH_LONG).show();
+        }//try
+        catch (Exception e)
+        {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+}

@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class helpBD extends SQLiteOpenHelper {
     String tableMessage = "CREATE TABLE messages(id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT unique, payload TEXT, fromm TEXT, too TEXT, priority INTEGER, size INT, date TEXT, checksum INTEGER, status INTEGER );";
     String tableiFilter = "CREATE TABLE ifilters(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT unique, company TEXT, status INTEGER, location TEXT, change TEXT);";
+    String tableUser = "CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT unique, email TEXT, position TEXT, status INTEGER);";
 
 
 
@@ -23,6 +24,7 @@ public class helpBD extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(tableiFilter);
         db.execSQL(tableMessage);
+        db.execSQL(tableUser);
     }
 
     @Override
