@@ -1,6 +1,6 @@
 <html>
 <head>
-
+    <title>AppSupport</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
      <link rel="stylesheet" type="text/css" href="css/styleslist.css">
     <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
@@ -89,8 +89,8 @@ function myFunction() {
 
 
 var node = document.createElement("li");
-	var fragment = create('<a href="#"><li class="clearfix">'+
-						'<div ><span class="price" style="float:right"><br>Online</span><h2>Alta en red corporativo</h2></div>'+
+	var fragment = create('<a href="#vista"><li class="clearfix" >'+
+						'<div ><h2> iFilter </h2></div>'+
 						'<table WIDTH=100%> <tr>'+
 								  '<td><img src="images/ups.png"  WIDTH=40 HEIGHT=40 ></td>'+
 								 '<td><img src="images/internet.png"  WIDTH=40 HEIGHT=40 ></td>'+
@@ -100,7 +100,7 @@ var node = document.createElement("li");
 								 '<td><img src="images/server.png"  WIDTH=40 HEIGHT=40 ></td>'+
 								 '<td><img src="images/vpn.png"  WIDTH=40 HEIGHT=40 ></td>'+
 								 '</tr><tr><td >UPS</td><td>Infinitum</td><td>Alestra</td><td>iFilter</td><td>Switch</td><td>Server</td><td>VPN</td></tr> </table>'+
-						'</li></a>');
+						'<br></li></a>');
 
 
 node.onclick = function () {
@@ -117,43 +117,36 @@ node.onclick = function () {
 function thisindex(elm)
 {
 
-    var re = document.getElementById('ele');
-	if (!re){
-		console.log("El elemento selecionado no existe");
-	} else {
-		var padre = re.parentNode;
-		padre.removeChild(re);
-	}
+        var re = document.getElementById('ele');
+        if (!re){
+            console.log("El elemento selecionado no existe");
+        } else {
+            var padre = re.parentNode;
+            padre.removeChild(re);
+        }
 
- var the_li = elm;
- var the_ul = elm.parentNode;
- var li_list = the_ul.childNodes;
- var count = 0; // Tracks the index of LI nodes
+     var the_li = elm;
+     var the_ul = elm.parentNode;
+     var li_list = the_ul.childNodes;
+     var count = 0;
 
- // Step through all the child nodes of the UL
- for( var i = 0; i < li_list.length; i++ )
- {
- var node = li_list.item(i);
- if( node )
- {
- // Check to see if the node is a LI
- if( node.nodeName == "LI" )
- {
- // Increment the count of LI nodes
- count++;
- // Check to see if this node is the one passed in
- if( the_li == node )
- {
- // If so, alert the current count
- //alert(count);
-	if(aux == count){
-		aux=-1;
-	}else
-		info(count);
- }
- }
- }
- }
+     for( var i = 0; i < li_list.length; i++ )
+     {
+         var node = li_list.item(i);
+         if( node ){
+            if( node.nodeName == "LI" ) {
+                count++;
+
+                 if( the_li == node ){
+
+                    if(aux == count){
+                        aux=-1;
+                    }else
+                        info(count);
+                 }
+            }
+        }
+     }
 }
 
 
@@ -161,13 +154,13 @@ function info(n){
 
 	var node = document.createElement("LI");
     node.id = 'ele';
-	var fragment = create('<div style="width:100%"> <div><canvas id="canvas" height="100" ></canvas>  </div> </div>');
+	var fragment = create('<div style="width:100%"><a name="vista"> <div><canvas id="canvas" height="100" ></canvas>  </div></a> </div>');
 
 	var d = document.getElementById('list');
 	node.appendChild(fragment);
 	d.insertBefore(node, d.children[n]);
-	aux=n;
 
+	aux=n;
 	graf();
 
 }
@@ -199,6 +192,16 @@ function info(n){
           pointHighlightFill : "#fff",
           pointHighlightStroke : "rgba(151,187,205,1)",
           data : [0,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),0]
+        },
+        {
+          label: "My Second dataset",
+          fillColor : "rgba(151,187,205,0.2)",
+          strokeColor : "rgba(151,187,205,1)",
+          pointColor : "rgba(151,187,205,1)",
+          pointStrokeColor : "#fff",
+          pointHighlightFill : "#fff",
+          pointHighlightStroke : "rgba(151,187,205,1)",
+          data : [0,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),0]
         }
       ]
 
@@ -211,6 +214,9 @@ function info(n){
 	      responsive: true
 	    });
   		}
+
+
+
 
 
 

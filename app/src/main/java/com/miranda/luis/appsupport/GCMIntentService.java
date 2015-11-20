@@ -13,6 +13,7 @@ import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -62,17 +63,22 @@ public class GCMIntentService extends GCMBaseIntentService {
     private void mostrarNotificacion(Context context, String message){
 
         String uuid="", command="", payload="";
+        int indi=0;
 
         try {
             JSONObject json = new JSONObject(message);
             JSONObject jsonM = json.getJSONObject("Message");
 
             uuid = jsonM.getString("UUID");
+            command = jsonM.getString("command");
+
+            if(command.equals("tic")){}
 
         }catch (Exception ex){}
 
+
         Intent notificationIntent = new Intent(context, Main.class);
-        notificationIntent.putExtra("alerta", uuid);
+        notificationIntent.putExtra("alerta", indi);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 1, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

@@ -18,6 +18,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.gcm.GCMRegistrar;
@@ -34,14 +35,27 @@ public class Main extends Activity implements View.OnClickListener {
     private String TAG = "Main";
     private String LOCAL_FILE = "file:///android_asset/login.html";
     private String LOCAL_FILE1 = "file:///android_asset/menu.html";
+    private String LOCAL_FILE2 = "file:///android_asset/ifilter.html";
+    private String LOCAL_FILE3 = "file:///android_asset/ticket.html";
+
     helpBD aBD;
     SQLiteDatabase db=null;
+    int action;
 
     Button enviar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            if(extras.containsKey("alerta"))
+            {
+                action = extras.getInt("alerta");
+            }
+        }
 
 
         setContentView(R.layout.activity_main);
@@ -63,17 +77,6 @@ public class Main extends Activity implements View.OnClickListener {
         }
 
 
-        try {
-
-            Intent intent = getIntent();
-            String value = intent.getStringExtra("alerta");
-            dataPayload(value);
-
-        }catch (Exception ex) {
-
-            Toast.makeText(this, "Error al recibir datos", Toast.LENGTH_LONG).show();
-
-        }
 
         myWebView = (WebView) findViewById(R.id.web);
         WebSettings webSettings = myWebView.getSettings();
@@ -86,11 +89,37 @@ public class Main extends Activity implements View.OnClickListener {
 
         Boolean registro = prefs.getBoolean("registro", false);
 
-        if(registro == true) myWebView.loadUrl(LOCAL_FILE1);
+        if(registro == true) {
+
+            switch (action){
+                //Cargar tickets
+                case 1:
+                    myWebView.loadUrl(LOCAL_FILE3);
+                break;
+
+                //Cargar iFilter
+                case 2:
+                    myWebView.loadUrl(LOCAL_FILE2);
+                break;
+
+                //Elimina registro.
+                case 3:
+                    myWebView.loadUrl(LOCAL_FILE);
+                    //metodo eliminar GCM
+                break;
+
+                //Inicio normal
+                default:
+                    myWebView.loadUrl(LOCAL_FILE1);
+                break;
+            }
+
+
+
+        }
         else {
             myWebView.loadUrl(LOCAL_FILE);
             Ejemplos();
-
         }
 
         myWebView.setWebViewClient(new WebViewClient() {
@@ -112,22 +141,33 @@ public class Main extends Activity implements View.OnClickListener {
 
     }
 
+
+    @Override
+    public void onNewIntent(Intent intent){
+        Bundle extras = intent.getExtras();
+        if(extras != null){
+            if(extras.containsKey("alerta"))
+            {
+                String msg = extras.getString("alerta");
+                Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+
+            }
+        }
+
+
+    }
+
+
+
+
+
+
+
+
     @Override
     public void onResume(){
         super.onResume();
         // put your code here...
-
-        try {
-
-            Intent intent = getIntent();
-            String value = intent.getStringExtra("alerta");
-            dataPayload(value);
-
-        }catch (Exception ex) {
-
-            Toast.makeText(this, "Error al recibir datos", Toast.LENGTH_LONG).show();
-
-        }
 
     }
 
@@ -333,7 +373,8 @@ public class Main extends Activity implements View.OnClickListener {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
-                    if (myWebView.canGoBack()) {
+                   if (myWebView.canGoBack()) {
+                        myWebView.goBack();
                         myWebView.goBack();
                     } else {
                         finish();
@@ -344,28 +385,6 @@ public class Main extends Activity implements View.OnClickListener {
         }
         return super.onKeyDown(keyCode, event);
     }
-
-
-    public  void dataPayload(String val ){
-
-
-
-        //identificar que datos recibimos
-
-        Toast.makeText(this, "Datos Verificados !!"+val, Toast.LENGTH_LONG).show();
-
-
-        //Si ifilter
-
-        //Si ticket
-
-
-
-
-
-    }
-
-
 
 
 
