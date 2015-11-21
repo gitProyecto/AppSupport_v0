@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
@@ -65,14 +66,27 @@ public class GCMIntentService extends GCMBaseIntentService {
         String uuid="", command="", payload="";
         int indi=0;
 
+        int id=0, status=0 , lastchange=0;
+
         try {
+
             JSONObject json = new JSONObject(message);
-            JSONObject jsonM = json.getJSONObject("Message");
+            JSONObject jsonI = json.getJSONObject("ifilter");
 
-            uuid = jsonM.getString("UUID");
-            command = jsonM.getString("command");
+            id = jsonI.getInt("id");
+            status = jsonI.getInt("status");
+            lastchange = jsonI.getInt("lastchange");
 
-            if(command.equals("tic")){}
+            if(id != 0)insertData(id,status,lastchange);
+
+
+            //JSONObject json = new JSONObject(message);
+            //JSONObject jsonM = json.getJSONObject("Message");
+
+            //uuid = jsonM.getString("UUID");
+            //command = jsonM.getString("command");
+
+            //if(command.equals("tic")){}
 
         }catch (Exception ex){}
 
@@ -116,6 +130,36 @@ public class GCMIntentService extends GCMBaseIntentService {
 
     }
 
+
+    public void insertData(int id, int status, int lastchange){
+
+        helpBD aBD;   SQLiteDatabase db=null;
+
+        try{
+            aBD=new helpBD(this,"data.db",null,1);
+            db = aBD.getWritableDatabase();
+            if (db!=null) {
+
+                db.execSQL("INSERT INTO changeifilters(id, ifilter_id, status, lastchange) VALUES(null,"+id+","+status+","+lastchange+");");
+
+                //datos de user
+                //execSQL("INSERT INTO users(id, name, email, position, status) VALUES(null,'Ing Luis Rosales','rosales@techno-world.com','Desarrollo de software',1);");
+                //db.execSQL("INSERT INTO users(id, name, email, position, status) VALUES(null,'Luis Flores','flores@techno-world.com','Soporte Tecnico',1);");
+
+
+                db.close();
+            } else
+                Toast.makeText(this, "db fue null :-(", Toast.LENGTH_LONG).show();
+        }//try
+        catch (Exception e)
+        {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+
+
+
+    }
 
 
 

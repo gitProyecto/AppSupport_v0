@@ -64,14 +64,13 @@ function data(){
 	var fragment = create('<a href="#"  ><li class="clearfix" >'+
 						'<div ><h2>'+obj[i].name+'</h2></div>'+
 						'<table WIDTH=100%> <tr>'+
-								  '<td><img src="images/ups.png"  WIDTH=40 HEIGHT=40 ></td>'+
-								 '<td><img src="images/internet.png"  WIDTH=40 HEIGHT=40 ></td>'+
-								 '<td><img src="images/internet.png"  WIDTH=40 HEIGHT=40 ></td>'+
 								 '<td><img src="images/ifilter.png"  WIDTH=40 HEIGHT=40 ></td>'+
+								 '<td><img src="images/ups.png"  WIDTH=40 HEIGHT=40 ></td>'+
+								 '<td><img src="images/internet.png"  WIDTH=40 HEIGHT=40 ></td>'+
 								 '<td><img src="images/switch.png"  WIDTH=40 HEIGHT=40 ></td>'+
 								 '<td><img src="images/server.png"  WIDTH=40 HEIGHT=40 ></td>'+
 								 '<td><img src="images/vpn.png"  WIDTH=40 HEIGHT=40 ></td>'+
-								 '</tr><tr><td >UPS</td><td>Infinitum</td><td>Alestra</td><td>iFilter</td><td>Switch</td><td>Server</td><td>VPN</td></tr> </table>'+
+								 '</tr><tr><td>'+obj[i].status+'</td><td >UPS</td><td>Internet</td><td>Switch</td><td>Server</td><td>VPN</td></tr> </table>'+
 						'<br></li></a>');
 
     node.onclick = function () {
@@ -92,14 +91,13 @@ var node = document.createElement("li");
 	var fragment = create('<a href="#vista"><li class="clearfix" >'+
 						'<div ><h2> iFilter </h2></div>'+
 						'<table WIDTH=100%> <tr>'+
+								  '<td><img src="images/ifilter.png"  WIDTH=40 HEIGHT=40 ></td>'+
 								  '<td><img src="images/ups.png"  WIDTH=40 HEIGHT=40 ></td>'+
 								 '<td><img src="images/internet.png"  WIDTH=40 HEIGHT=40 ></td>'+
-								 '<td><img src="images/internet.png"  WIDTH=40 HEIGHT=40 ></td>'+
-								 '<td><img src="images/ifilter.png"  WIDTH=40 HEIGHT=40 ></td>'+
 								 '<td><img src="images/switch.png"  WIDTH=40 HEIGHT=40 ></td>'+
 								 '<td><img src="images/server.png"  WIDTH=40 HEIGHT=40 ></td>'+
 								 '<td><img src="images/vpn.png"  WIDTH=40 HEIGHT=40 ></td>'+
-								 '</tr><tr><td >UPS</td><td>Infinitum</td><td>Alestra</td><td>iFilter</td><td>Switch</td><td>Server</td><td>VPN</td></tr> </table>'+
+								 '</tr><tr><td>Off Line</td><td>UPS</td><td>Infinitum</td><td>Switch</td><td>Server</td><td>VPN</td></tr> </table>'+
 						'<br></li></a>');
 
 
@@ -168,52 +166,91 @@ function info(n){
 
     var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
 
-    var lineChartData = {
-      //labels : ["January","February","March","April","May","June","July","August","September","October","November","December"],
-      labels : ["","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday",""],
+	function graf(){
 
-      datasets : [
-        {
-          label: "My First dataset",
-          fillColor : "rgba(220,220,220,0.2)",
-          strokeColor : "rgba(220,220,220,1)",
-          pointColor : "rgba(220,220,220,1)",
-          pointStrokeColor : "#fff",
-          pointHighlightFill : "#fff",
-          pointHighlightStroke : "rgba(220,220,220,1)",
-          data : [0,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),0]
-        },
-        {
-          label: "My Second dataset",
-          fillColor : "rgba(151,187,205,0.2)",
-          strokeColor : "rgba(151,187,205,1)",
-          pointColor : "rgba(151,187,205,1)",
-          pointStrokeColor : "#fff",
-          pointHighlightFill : "#fff",
-          pointHighlightStroke : "rgba(151,187,205,1)",
-          data : [0,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),0]
-        },
-        {
-          label: "My Second dataset",
-          fillColor : "rgba(151,187,205,0.2)",
-          strokeColor : "rgba(151,187,205,1)",
-          pointColor : "rgba(151,187,205,1)",
-          pointStrokeColor : "#fff",
-          pointHighlightFill : "#fff",
-          pointHighlightStroke : "rgba(151,187,205,1)",
-          data : [0,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),0]
+            var str1 = "[8";
+        for(var j=9; j<22; j++){
+            str1 = str1.concat(","+j);
         }
-      ]
+         str1 = str1.concat(",22]");
 
-    }
+        //var ad = ["","1","2","3","4","5","6","7","8","9","10","11","12","13","14",""] ;
 
+        var lineChartData = {
+         labels : JSON.parse(str1),
 
-	  	function graf(){
+          datasets : [
+            {
+              label: "My First dataset",
+              fillColor : "rgba(0,0,0,0)",
+              strokeColor : "rgba(151,187,205,1)",
+              pointColor : "rgba(151,187,205,1)",
+              pointStrokeColor : "#fff",
+              pointHighlightFill : "#fff",
+              pointHighlightStroke : "rgba(220,220,220,1)",
+              data : [0,60,60,45,0,0,0,58,60,60,60,60,60,60,0]
+            },
+            {
+              label: "My Second dataset",
+              fillColor : "rgba(0,0,0,0)",
+              strokeColor : "rgba(255,0,0,0.3)",
+              pointColor : "rgba(255,0,0,0.3)",
+              pointStrokeColor : "#fff",
+              pointHighlightFill : "#fff",
+              pointHighlightStroke : "rgba(151,187,205,1)",
+              data : [0,60,60,60,60,60,30,60,60,60,60,60,50,60,0]
+            }
+            /*,
+            {
+              label: "My Second dataset",
+              fillColor : "rgba(0,0,0,0)",
+              strokeColor : "rgba(255,0,0,0.3)",
+              pointColor : "rgba(255,0,0,0.5)",
+              pointStrokeColor : "#fff",
+              pointHighlightFill : "#fff",
+              pointHighlightStroke : "rgba(151,187,205,1)",
+              data : [0,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),0]
+            },
+            {
+              label: "My First dataset",
+              fillColor : "rgba(0,0,0,0)",
+              strokeColor : "rgba(0,255,0,0.3)",
+              pointColor : "rgba(0,255,0,0.3)",
+              pointStrokeColor : "#fff",
+              pointHighlightFill : "#fff",
+              pointHighlightStroke : "rgba(220,220,220,1)",
+              data : [0,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),0]
+            },
+            {
+              label: "My Second dataset",
+              fillColor : "rgba(0,0,0,0)",
+              strokeColor : "rgba(0,0,255,0.3)",
+              pointColor : "rgba(0,0,255,0.3)",
+              pointStrokeColor : "#fff",
+              pointHighlightFill : "#fff",
+              pointHighlightStroke : "rgba(151,187,205,1)",
+              data : [0,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),0]
+            },
+            {
+              label: "My Second dataset",
+              fillColor : "rgba(0,0,0,0)",
+              strokeColor : "rgba(255,0,255,0.3)",
+              pointColor : "rgba(255,0,255,0.3)",
+              pointStrokeColor : "#fff",
+              pointHighlightFill : "#fff",
+              pointHighlightStroke : "rgba(151,187,205,1)",
+              data : [0,randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),0]
+            }*/
+          ]
+
+        }
+
 	    var ctx = document.getElementById("canvas").getContext("2d");
 	    window.myLine = new Chart(ctx).Line(lineChartData, {
 	      responsive: true
 	    });
-  		}
+
+  	}
 
 
 

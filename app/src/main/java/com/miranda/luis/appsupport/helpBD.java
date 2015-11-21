@@ -9,8 +9,12 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class helpBD extends SQLiteOpenHelper {
+
+    String tableiFilter = "CREATE TABLE ifilters(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT unique, company TEXT, location TEXT);";
+    String tablechangeiFilter = "CREATE TABLE changeifilters(id INTEGER PRIMARY KEY AUTOINCREMENT, ifilter_id INTEGER, status INTEGER, lastchange INTEGER);";
+
+
     String tableMessage = "CREATE TABLE messages(id INTEGER PRIMARY KEY AUTOINCREMENT, uuid TEXT unique, payload TEXT, fromm TEXT, too TEXT, priority INTEGER, size INT, date TEXT, checksum INTEGER, status INTEGER );";
-    String tableiFilter = "CREATE TABLE ifilters(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT unique, company TEXT, status INTEGER, location TEXT, change TEXT);";
     String tableUser = "CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT unique, email TEXT, position TEXT, status INTEGER);";
 
 
@@ -23,6 +27,7 @@ public class helpBD extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(tableiFilter);
+        db.execSQL(tablechangeiFilter);
         db.execSQL(tableMessage);
         db.execSQL(tableUser);
     }

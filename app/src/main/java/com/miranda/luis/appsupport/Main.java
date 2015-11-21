@@ -138,7 +138,6 @@ public class Main extends Activity implements View.OnClickListener {
 
 
 
-
     }
 
 
@@ -228,7 +227,7 @@ public class Main extends Activity implements View.OnClickListener {
                     while (cursor.moveToNext()){
 
                         JSONObject obj = new JSONObject();
-                        obj.put("id",cursor.getString(0));
+                        obj.put("id", cursor.getString(0));
                         array.put(obj);
                     }
                     cursor.close();
@@ -257,7 +256,8 @@ public class Main extends Activity implements View.OnClickListener {
                 aBD=new helpBD(mContext,"data.db",null,1);
                 db = aBD.getReadableDatabase();
                 if (db!=null) {
-                    Cursor cursor = db.rawQuery("SELECT * FROM ifilters ",null);
+                    Cursor cursor = db.rawQuery("SELECT  i.id, i.name, i.company, i.location, changeifilters.status FROM ifilters i " +
+                            " LEFT JOIN changeifilters ON i.id = changeifilters.ifilter_id AND  changeifilters.id = (SELECT MAX(id) FROM changeifilters WHERE  ifilter_id= i.id ) ;",null);
 
                     while (cursor.moveToNext()){
 
@@ -265,9 +265,10 @@ public class Main extends Activity implements View.OnClickListener {
                         obj.put("id",cursor.getString(0));
                         obj.put("name",cursor.getString(1));
                         obj.put("company",cursor.getString(2));
-                        obj.put("status",cursor.getString(3));
-                        obj.put("location",cursor.getString(4));
-                        obj.put("change",cursor.getString(5));
+                        obj.put("location",cursor.getString(3));
+                        if(cursor.getString(4).equals("1")){  obj.put("status","OnLine");}
+                        else{ obj.put("status", "OffLine");  }
+
                         array.put(obj);
                     }
                     cursor.close();
@@ -310,8 +311,7 @@ public class Main extends Activity implements View.OnClickListener {
                 }
                 else
                     Toast.makeText(mContext, "db fue null :-(", Toast.LENGTH_LONG).show();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 String cad2 = "ERROR " + e.getMessage();
             }
 
@@ -398,15 +398,27 @@ public class Main extends Activity implements View.OnClickListener {
             if (db!=null) {
 
                 //datos de mensajes
-                db.execSQL("INSERT INTO messages(id, uuid, payload, fromm, too, priority, size, date, checksum, status) VALUES(null,'123456789012','contiene info de ticket y ifilter','soporte1','...',5,120,'12/12/1212',10,0);");
+                //db.execSQL("INSERT INTO messages(id, uuid, payload, fromm, too, priority, size, date, checksum, status) VALUES(null,'123456789012','contiene info de ticket y ifilter','soporte1','...',5,120,'12/12/1212',10,0);");
 
-                //datos de host
-                db.execSQL("INSERT INTO ifilters(id, name, company, status, location, change) VALUES(null,'Corporativo','Korporativo',1,'9.34234 -82.34245','12/12/1212');");
-                db.execSQL("INSERT INTO ifilters(id, name, company, status, location, change) VALUES(null,'Centro','Korporativo',1,'9.34234 -82.34245','12/12/1212');");
+                //datos de ifilter
+                db.execSQL("INSERT INTO ifilters(id, name, company, location) VALUES(null,'Corporativo','Korporativo','9.34234 -82.34245');");
+                db.execSQL("INSERT INTO ifilters(id, name, company, location) VALUES(null,'Centro','Korporativo','9.34234 -82.34245');");
+                db.execSQL("INSERT INTO ifilters(id, name, company, location) VALUES(null,'Toluca','Korporativo','9.34234 -82.34245');");
+                db.execSQL("INSERT INTO ifilters(id, name, company, location) VALUES(null,'Acapulco','Korporativo','9.34234 -82.34245');");
+
+                db.execSQL("INSERT INTO changeifilters(id, ifilter_id, status, lastchange) VALUES(null,1,1,9342348245);");
+                db.execSQL("INSERT INTO changeifilters(id, ifilter_id, status, lastchange) VALUES(null,2,1,9342348245);");
+                db.execSQL("INSERT INTO changeifilters(id, ifilter_id, status, lastchange) VALUES(null,3,0,9342348245);");
+                db.execSQL("INSERT INTO changeifilters(id, ifilter_id, status, lastchange) VALUES(null,4,1,9342348245);");
+
+                db.execSQL("INSERT INTO changeifilters(id, ifilter_id, status, lastchange) VALUES(null,1,0,9342348245);");
+                db.execSQL("INSERT INTO changeifilters(id, ifilter_id, status, lastchange) VALUES(null,2,1,9342348245);");
+                db.execSQL("INSERT INTO changeifilters(id, ifilter_id, status, lastchange) VALUES(null,3,0,9342348245);");
+                db.execSQL("INSERT INTO changeifilters(id, ifilter_id, status, lastchange) VALUES(null,4,1,9342348245);");
 
                 //datos de user
-                db.execSQL("INSERT INTO users(id, name, email, position, status) VALUES(null,'Ing Luis Rosales','rosales@techno-world.com','Desarrollo de software',1);");
-                db.execSQL("INSERT INTO users(id, name, email, position, status) VALUES(null,'Luis Flores','flores@techno-world.com','Soporte Tecnico',1);");
+                //execSQL("INSERT INTO users(id, name, email, position, status) VALUES(null,'Ing Luis Rosales','rosales@techno-world.com','Desarrollo de software',1);");
+                //db.execSQL("INSERT INTO users(id, name, email, position, status) VALUES(null,'Luis Flores','flores@techno-world.com','Soporte Tecnico',1);");
 
 
                 db.close();
