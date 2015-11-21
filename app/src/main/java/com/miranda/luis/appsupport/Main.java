@@ -244,6 +244,43 @@ public class Main extends Activity implements View.OnClickListener {
         }
 
 
+        // Obteber datos de Ticket
+        @JavascriptInterface
+        public  String dataiFilters(){
+
+            JSONArray array = new JSONArray();
+
+            try{
+                aBD=new helpBD(mContext,"data.db",null,1);
+                db = aBD.getReadableDatabase();
+                if (db!=null) {
+                    Cursor cursor = db.rawQuery("SELECT * FROM changeifilters ",null);
+
+                    while (cursor.moveToNext()){
+
+                        JSONObject obj = new JSONObject();
+                        obj.put("id", cursor.getString(0));
+                        obj.put("ifilter_id", cursor.getString(1));
+                        obj.put("status", cursor.getString(2));
+                        obj.put("change", cursor.getString(3));
+                        array.put(obj);
+                    }
+                    cursor.close();
+                    db.close();
+                }
+                else
+                    Toast.makeText(mContext, "db fue null :-(", Toast.LENGTH_LONG).show();
+            }
+            catch (Exception e) {
+                String cad2 = "ERROR " + e.getMessage();
+            }
+
+            Toast.makeText(mContext, array.toString(), Toast.LENGTH_LONG).show();
+
+            return array.toString();
+        }
+
+
 
 
         // Obteber datos de Hosts

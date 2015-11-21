@@ -66,18 +66,18 @@ public class GCMIntentService extends GCMBaseIntentService {
         String uuid="", command="", payload="";
         int indi=0;
 
-        int id=0, status=0 , lastchange=0;
+        String id="", status="" , lastchange="";
 
         try {
 
             JSONObject json = new JSONObject(message);
-            JSONObject jsonI = json.getJSONObject("ifilter");
+            JSONObject jsonI = json.getJSONObject("iFilter");
 
-            id = jsonI.getInt("id");
-            status = jsonI.getInt("status");
-            lastchange = jsonI.getInt("lastchange");
+            id = jsonI.getString("id");
+            status = jsonI.getString("status");
+            lastchange = jsonI.getString("change");
 
-            if(id != 0)insertData(id,status,lastchange);
+             insertData(id,status,lastchange);
 
 
             //JSONObject json = new JSONObject(message);
@@ -131,7 +131,7 @@ public class GCMIntentService extends GCMBaseIntentService {
     }
 
 
-    public void insertData(int id, int status, int lastchange){
+    public void insertData(String id, String status, String lastchange){
 
         helpBD aBD;   SQLiteDatabase db=null;
 
@@ -140,7 +140,7 @@ public class GCMIntentService extends GCMBaseIntentService {
             db = aBD.getWritableDatabase();
             if (db!=null) {
 
-                db.execSQL("INSERT INTO changeifilters(id, ifilter_id, status, lastchange) VALUES(null,"+id+","+status+","+lastchange+");");
+                db.execSQL("INSERT INTO changeifilters(id, ifilter_id, status, lastchange) VALUES(null," + id + "," + status + "," + lastchange + ");");
 
                 //datos de user
                 //execSQL("INSERT INTO users(id, name, email, position, status) VALUES(null,'Ing Luis Rosales','rosales@techno-world.com','Desarrollo de software',1);");
